@@ -13,12 +13,10 @@ Smallest number of multiplicative persistence n.
 More information on https://oeis.org/A003001
 
 It is conjectured that there is no base-10 number with persistence greater than 11, but no proof exists.
+Numbers up to 10^1500 were tested by Stephanie Perez and Robert Styer (Persistence: A Digit Problem 2013)
 ## Additive Persistence
 Smallest number of additive persistence n.
 
 ```0, 10, 19, 199, 19999999999999999999999```
 
 More information on https://oeis.org/A006050
-## Strategy
-- decending order
-- 
