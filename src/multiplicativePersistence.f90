@@ -6,7 +6,7 @@ CONTAINS
     IMPLICIT NONE
 
     CLASS(tSequence), INTENT(INOUT) :: sequence
-    INTEGER :: product
+    INTEGER(8) :: product
     INTEGER :: iDigit, iStep
     INTEGER, ALLOCATABLE :: digits(:)
 

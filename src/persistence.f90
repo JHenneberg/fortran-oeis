@@ -25,7 +25,7 @@ CONTAINS
     END SUBROUTINE initalize_tSequence
 
 
-    SUBROUTINE add_value_tSequence(this, value)
+  SUBROUTINE add_value_tSequence(this, value)
     IMPLICIT NONE
 
     CLASS(tSequence), INTENT(INOUT) :: this
@@ -42,8 +42,9 @@ CONTAINS
 
     INTEGER(8), INTENT(IN) :: value
     INTEGER(8), INTENT(IN) :: nDigit
+    INTEGER(8) :: rem
     INTEGER :: digits(nDigit)
-    INTEGER :: iDigit, rem
+    INTEGER :: iDigit
 
     rem = value
     DO iDigit = 1, nDigit
@@ -56,7 +57,7 @@ CONTAINS
   FUNCTION get_nDigit(value) RESULT(nDigit)
     IMPLICIT NONE
 
-    INTEGER, INTENT(IN) :: value
+    INTEGER(8), INTENT(IN) :: value
     INTEGER :: nDigit
 
     nDigit = FLOOR(LOG10(REAL(value)) + 1)
