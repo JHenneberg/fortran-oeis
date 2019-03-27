@@ -1,4 +1,6 @@
 MODULE multiplicative_persistence_mod
+  ! Smallest number of multiplicative persistence n.
+  ! http://oeis.org/A003001
   USE sequence_mod
   IMPLICIT NONE
 CONTAINS
