@@ -1,160 +1,160 @@
-MODULE sequence_mod
-  IMPLICIT NONE
-  PRIVATE
-  PUBLIC :: tSequence, tSequences
-  PUBLIC :: get_digits
+module sequence_mod
+  implicit none
+  private
+  public :: tSequence, tSequences
+  public :: get_digits
 
-  TYPE :: tSequence
-    INTEGER(8) :: values(16) = 0
-    INTEGER(8) :: nDigits(16) = 0
-    INTEGER :: length = 1
-  CONTAINS
-    PROCEDURE, PUBLIC :: initalize => initalize_tSequence
-    PROCEDURE, PUBLIC :: add_value => add_value_tSequence
-    PROCEDURE, PUBLIC :: reset => reset_tSequence
-  END TYPE
+  type :: tSequence
+    integer(8) :: values(16) = 0
+    integer(8) :: nDigits(16) = 0
+    integer :: length = 1
+  contains
+    PROCEDURE, public :: initalize => initalize_tSequence
+    PROCEDURE, public :: add_value => add_value_tSequence
+    PROCEDURE, public :: reset => reset_tSequence
+  end type
 
-  TYPE :: tSequences
-    CLASS(tSequence), ALLOCATABLE :: Sequences(:)
-  CONTAINS
-    PROCEDURE, PUBLIC :: initalize => initalize_tSequences
-    PROCEDURE, PUBLIC :: add_sequence_if_valid => add_sequence_if_valid_tSequences
-    PROCEDURE, PUBLIC :: get_last => get_last_tSequences
-    PROCEDURE, PUBLIC :: print => print_tSequences
+  type :: tSequences
+    class(tSequence), allocatable :: Sequences(:)
+  contains
+    PROCEDURE, public :: initalize => initalize_tSequences
+    PROCEDURE, public :: add_sequence_if_valid => add_sequence_if_valid_tSequences
+    PROCEDURE, public :: get_last => get_last_tSequences
+    PROCEDURE, public :: print => print_tSequences
     !FINAL :: destroy_tSequences
-  END TYPE
+  end type
 
-CONTAINS
-  SUBROUTINE initalize_tSequence(this, value)
-    IMPLICIT NONE
+contains
+  subroutine initalize_tSequence(this, value)
+    implicit none
 
-    CLASS(tSequence), INTENT(INOUT) :: this
-    INTEGER(8), INTENT(IN) :: value
+    class(tSequence), intent(inout) :: this
+    integer(8), intent(in) :: value
 
     this%values(this%length) = value
     this%nDigits(this%length) = get_nDigit(value)
-    END SUBROUTINE initalize_tSequence
+  end subroutine initalize_tSequence
 
 
-  SUBROUTINE add_value_tSequence(this, value)
-    IMPLICIT NONE
+  subroutine add_value_tSequence(this, value)
+    implicit none
 
-    CLASS(tSequence), INTENT(INOUT) :: this
-    INTEGER(8), INTENT(IN) :: value
+    class(tSequence), intent(inout) :: this
+    integer(8), intent(in) :: value
 
     this%values(this%length + 1) = value
     this%length = this%length + 1
     this%nDigits(this%length) = get_nDigit(value)
-  END SUBROUTINE add_value_tSequence
+  end subroutine add_value_tSequence
 
 
-  SUBROUTINE reset_tSequence(this)
-    IMPLICIT NONE
+  subroutine reset_tSequence(this)
+    implicit none
 
-    CLASS(tSequence), INTENT(INOUT) :: this
+    class(tSequence), intent(inout) :: this
 
     this%values = 0
     this%nDigits = 0
     this%length = 1
-  END SUBROUTINE reset_tSequence
+  end subroutine reset_tSequence
 
 
-  SUBROUTINE initalize_tSequences(this, value)
-    IMPLICIT NONE
+  subroutine initalize_tSequences(this, value)
+    implicit none
 
-    CLASS(tSequences), INTENT(INOUT) :: this
-    INTEGER(8), INTENT(IN) :: value
+    class(tSequences), intent(inout) :: this
+    integer(8), intent(in) :: value
 
-    TYPE(tSequence) :: seq
+    type(tSequence) :: seq
 
-    IF (ALLOCATED(this%Sequences)) THEN
-      CALL this%Sequences(SIZE(this%Sequences))%reset()
-      CALL this%Sequences(SIZE(this%Sequences))%initalize(value)
-    ELSE
-      ALLOCATE(this%Sequences(2))
-      CALL this%Sequences(1)%initalize(value)
-      CALL this%Sequences(2)%initalize(value)
-    END IF
-  END SUBROUTINE
+    if (allocateD(this%Sequences)) then
+      call this%Sequences(SIZE(this%Sequences))%reset()
+      call this%Sequences(SIZE(this%Sequences))%initalize(value)
+    else
+      allocate(this%Sequences(2))
+      call this%Sequences(1)%initalize(value)
+      call this%Sequences(2)%initalize(value)
+    end if
+  end subroutine initalize_tSequences
 
 
-  SUBROUTINE add_sequence_if_valid_tSequences(this, sequence)
+  subroutine add_sequence_if_valid_tSequences(this, sequence)
     !! add a sequence if the sequence is "better" (has more steps and value is lower)
-    IMPLICIT NONE
+    implicit none
 
-    CLASS(tSequences), INTENT(INOUT) :: this
-    TYPE(tSequence), INTENT(IN) :: sequence
+    class(tSequences), intent(inout) :: this
+    type(tSequence), intent(in) :: sequence
 
-    TYPE(tSequences) :: tmp_sequences
-    INTEGER :: nSequence
+    type(tSequences) :: tmp_sequences
+    integer :: nSequence
 
-    IF (ALLOCATED(this%Sequences)) THEN
-      IF (this%Sequences(SIZE(this%Sequences) - 1)%length < sequence%length) THEN
+    if (allocateD(this%Sequences)) then
+      if (this%Sequences(SIZE(this%Sequences) - 1)%length < sequence%length) then
         nSequence = SIZE(this%Sequences)
-        ALLOCATE(tmp_sequences%Sequences, SOURCE = this%Sequences)
-        DEALLOCATE(this%Sequences)
+        allocate(tmp_sequences%Sequences, SOURCE = this%Sequences)
+        deallocate(this%Sequences)
 
-        ALLOCATE(this%Sequences(nSequence + 1)) ! allocate one more sequence, for further tests
+        allocate(this%Sequences(nSequence + 1)) ! allocate one more sequence, for further tests
         this%Sequences(1:nSequence) = tmp_sequences%Sequences ! save all old sequences
         this%Sequences(nSequence) = sequence ! add new sequence on last position
-        CALL this%Sequences(nSequence + 1)%reset() !
+        call this%Sequences(nSequence + 1)%reset() !
 
-        DEALLOCATE(tmp_sequences%Sequences)
-      ELSE
-        CALL this%Sequences(SIZE(this%Sequences))%reset()
-      END IF
-    ELSE
-      ALLOCATE(this%Sequences(1))
+        deallocate(tmp_sequences%Sequences)
+      else
+        call this%Sequences(SIZE(this%Sequences))%reset()
+      end if
+    else
+      allocate(this%Sequences(1))
       this%Sequences(1) = sequence
-    END IF
-  END SUBROUTINE add_sequence_if_valid_tSequences
+    end if
+  end subroutine add_sequence_if_valid_tSequences
 
 
-  FUNCTION get_last_tSequences(this) RESULT(sequence)
-    IMPLICIT NONE
+  function get_last_tSequences(this) result(sequence)
+    implicit none
 
-    CLASS(tSequences), INTENT(INOUT) :: this
-    TYPE(tSequence) :: sequence
+    class(tSequences), intent(inout) :: this
+    type(tSequence) :: sequence
 
     sequence = this%Sequences(SIZE(this%Sequences))
-  END FUNCTION
+  end function get_last_tSequences
 
 
-  SUBROUTINE print_tSequences(this)
-    IMPLICIT NONE
+  subroutine print_tSequences(this)
+    implicit none
 
-    CLASS(tSequences), INTENT(IN) :: this
-    INTEGER :: i
+    class(tSequences), intent(in) :: this
+    integer :: i
 
-    DO i = 1, SIZE(this%Sequences) - 1
+    do i = 1, SIZE(this%Sequences) - 1
       WRITE(*, '(I4, 12I12)') this%Sequences(i)%length, this%Sequences(i)%values(1:12)
-    END DO
-  END SUBROUTINE
+    end do
+  end subroutine print_tSequences
 
 
-  FUNCTION get_digits(value, nDigit) RESULT(digits)
-    IMPLICIT NONE
+  function get_digits(value, nDigit) result(digits)
+    implicit none
 
-    INTEGER(8), INTENT(IN) :: value
-    INTEGER(8), INTENT(IN) :: nDigit
-    INTEGER(8) :: rem
-    INTEGER :: digits(nDigit)
-    INTEGER :: iDigit
+    integer(8), intent(in) :: value
+    integer(8), intent(in) :: nDigit
+    integer(8) :: rem
+    integer :: digits(nDigit)
+    integer :: iDigit
 
     rem = value
-    DO iDigit = 1, nDigit
+    do iDigit = 1, nDigit
       digits(iDigit) = rem - (rem / 10) * 10
       rem = rem / 10
-    END DO
-  END FUNCTION get_digits
+    end do
+  end function get_digits
 
 
-  FUNCTION get_nDigit(value) RESULT(nDigit)
-    IMPLICIT NONE
+  function get_nDigit(value) result(nDigit)
+    implicit none
 
-    INTEGER(8), INTENT(IN) :: value
-    INTEGER :: nDigit
+    integer(8), intent(in) :: value
+    integer :: nDigit
 
     nDigit = FLOOR(LOG10(REAL(value)) + 1)
-  END function
-END MODULE sequence_mod
+  end function get_nDigit
+end module sequence_mod

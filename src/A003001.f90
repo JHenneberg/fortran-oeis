@@ -1,39 +1,39 @@
-MODULE multiplicative_persistence_mod
+module A003001_mod
   ! Smallest number of multiplicative persistence n.
   ! http://oeis.org/A003001
-  USE sequence_mod
-  IMPLICIT NONE
-CONTAINS
-  SUBROUTINE calc_multiplicative_persistence(sequences, iseq)
-    IMPLICIT NONE
+  use sequence_mod
+  implicit none
+contains
+  subroutine A003001(sequences, iseq)
+    implicit none
 
-    TYPE(tSequences), INTENT(INOUT) :: sequences
-    INTEGER, OPTIONAL, INTENT(IN) :: iseq
+    type(tSequences), intent(inout) :: sequences
+    integer, optional, intent(in) :: iseq
 
-    TYPE(tSequence) :: seq
-    INTEGER(8) :: product
-    INTEGER :: iDigit, iStep
-    INTEGER, ALLOCATABLE :: digits(:)
+    type(tSequence) :: seq
+    integer(8) :: product
+    integer :: iDigit, iStep
+    integer, allocatable :: digits(:)
 
-    IF (PRESENT(iseq)) THEN
+    if (present(iseq)) then
       seq = sequences%Sequences(iseq)
-    ELSE
+    else
       seq = sequences%get_last()
-    END IF
+    end if
 
     iStep = 1
-    DO WHILE (seq%nDigits(iStep) > 1)
-      ALLOCATE(digits, SOURCE = get_digits(seq%values(iStep), seq%nDigits(iStep)))
+    do while (seq%nDigits(iStep) > 1)
+      allocate(digits, SOURCE = get_digits(seq%values(iStep), seq%nDigits(iStep)))
       product = 1
-      DO iDigit = 1, seq%nDigits(iStep)
+      do iDigit = 1, seq%nDigits(iStep)
         product = product * digits(iDigit)
-      END DO
+      end do
       iStep = iStep + 1
-      CALL seq%add_value(product)
-      DEALLOCATE(digits)
-    END DO
+      call seq%add_value(product)
+      deallocate(digits)
+    end do
 
-    IF (.NOT. PRESENT(iseq)) &
-      CALL sequences%add_sequence_if_valid(seq)
-  END SUBROUTINE
-END MODULE
+    if (.not. present(iseq)) &
+      call sequences%add_sequence_if_valid(seq)
+  end subroutine A003001
+end module A003001_mod
