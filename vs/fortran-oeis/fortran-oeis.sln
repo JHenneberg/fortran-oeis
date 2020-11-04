@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "fortran-oeis", "fortran-oeis\fortran-oeis.vfproj", "{55E64B8D-ADEA-4A59-AA4D-616A6DBD8443}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AE7FF088-2E52-47FB-B3BE-4844C43C0412} = {AE7FF088-2E52-47FB-B3BE-4844C43C0412}
+	EndProjectSection
+EndProject
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "fortran-unit-test_lib", "..\..\lib\fortran-unit-test\vs\fortran-unit-test_lib\fortran-unit-test_lib.vfproj", "{AE7FF088-2E52-47FB-B3BE-4844C43C0412}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +20,10 @@ Global
 		{55E64B8D-ADEA-4A59-AA4D-616A6DBD8443}.Debug|x86.Build.0 = Debug|Win32
 		{55E64B8D-ADEA-4A59-AA4D-616A6DBD8443}.Release|x86.ActiveCfg = Release|Win32
 		{55E64B8D-ADEA-4A59-AA4D-616A6DBD8443}.Release|x86.Build.0 = Release|Win32
+		{AE7FF088-2E52-47FB-B3BE-4844C43C0412}.Debug|x86.ActiveCfg = Debug|Win32
+		{AE7FF088-2E52-47FB-B3BE-4844C43C0412}.Debug|x86.Build.0 = Debug|Win32
+		{AE7FF088-2E52-47FB-B3BE-4844C43C0412}.Release|x86.ActiveCfg = Release|Win32
+		{AE7FF088-2E52-47FB-B3BE-4844C43C0412}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
