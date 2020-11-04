@@ -23,10 +23,15 @@ contains
 
     logical(4), optional, intent(inout) :: passed
 
+    integer :: pair00, pair11
 
     call test_case_create('calc_A046859', SUITE)
 
+    pair00 = calc_A046859(0, 0)
+    pair11 = calc_A046859(1, 1)
 
+    call assert_equal(pair00, 1, FILE_NAME = __FILE__, LINE_NUMBER = __LINE__, SUITE = SUITE)
+    call assert_equal(pair11, 3, FILE_NAME = __FILE__, LINE_NUMBER = __LINE__, SUITE = SUITE)
 
     if (present(passed)) &
       passed = all(test_case_get_assert_results('calc_A046859', SUITE))
